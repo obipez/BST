@@ -1,4 +1,4 @@
-public class BST<E> {
+public class BST<E extends Comparable<E>> {
 	//root of the tree
 	Node root;
 	//size of the tree
@@ -21,52 +21,72 @@ public class BST<E> {
 		}
 	}
 
-
 	//add
 	public void add(E item) {
-		Node node = new Node();
-		node = root;
-		if(root == null) {
-			root = new Node(item);
-		}
-		else {
-			root.add(item) = new Node(item);  //not sure about this at all
-		}
-		else {
-			if(root != null) {
-				tree.addHelper();
-			}
-		}
-	
-		//code for add, maybe useful to have recursive helper method
-		//		addHelper(root, item);
-	
-	public void addHelper(Node root, E item) {
-		Node node = new Node();
-		if(node == null) {
-			node = new Node(item);
-		} 
-		else { 
-			if (item < root.data) {
-				root.left = add(root.left, item);
-				root.left = new Node(item);
-			}
-			else (item > root.data) {
-				root.right = add(root.right, item);
-				root.right = new Node(item);
-			}
-			return;
-		}
+//		//code for add, maybe useful to have recursive helper method
+			addHelper(root, item);
 		}
 
-	//find element with name item in tree
-	public Node search(E item) {
-		return null;
+	public Node addHelper(Node root, E item) {
+		int value = item.compareTo(root.data);
+		if(value == 0) {
+			Node newNode = new Node();
+			newNode.data = item;
+			root = newNode;
+			return root;
+		}
+		if (value < 0) {
+			if(root.left == null) {
+				Node newNode = new Node();
+				newNode.data = item;
+			}
+			else {
+				addHelper(root.left, item);
+			}
+		}
+		else {
+			if(root.right == null) {
+				Node newNode = new Node();
+				newNode.data = item;
+			}
+			else {
+				addHelper(root.right, item);
+			}
+		}
+		return root;
 	}
 
-	//mnumber of elements inside tree
-	public void size() {
+	//find element with name item in tree
+	public void search(E item) {
+		Node found = searchHelper(root, item);
+		if(found == null) {
+			System.out.println("No item found.");
+		}
+		else {
+			System.out.println("Found: " + found.data);
+		}
+	}
 
+	private Node searchHelper(Node root, E item) {
+		//item not in tree or first one is item
+		if(root == null || root.data == item) {
+			return root;
+		}
+		if(root.data.compareTo(item) > 0) {
+			return searchHelper(root.left, item);
+		}
+		return searchHelper(root.right, item);
+	}
+
+	//number of elements inside tree
+	public void size() {
+		System.out.println(sizeHelper(root)); 
+	}
+	private int sizeHelper(Node node) { 
+		if (node == null) return(0); 
+		else { 
+			return(sizeHelper(node.left) + sizeHelper(node.right)) + 1; 
+		} 
 	}
 
 	//height of the tree
@@ -75,8 +95,14 @@ public class BST<E> {
 	}
 
 	//minimum of subtree starting at root
-	public E min(Node root) {
-		return null;
+	public E min(Node node) {
+	        Node current = node;
+	 
+	        /* loop down to find the leftmost leaf */
+	        while (current.left != null) {
+	            current = current.left;
+	        }
+	        return (current.data);
 	}
 
 	//maximum of subtree starting at root
@@ -95,48 +121,82 @@ public class BST<E> {
 	}
 
 	//different traversals of the tree
-	public void preorder() {
-	}
-
-	public void inOrder() {
-		if(root == null) return;
-		if(root != null) {
-			inOrder(root.left);
-			System.out.println(root.data);
-			inOrder(root.right);
+	public void preorder(Node node) {
+		if(node == null) {
+			return;
 		}
+		System.out.printf("%s " + node.data);
+		preorder(node.left);
+		preorder(node.right);
 	}
 
-	public void postorder() {
+	public void inorder(Node node) {
+		if(node == null) {
+			return;
+		}
+		inorder(node.left);
+		System.out.printf("%s " + node.data);
+		inorder(node.right);
+	}
 
+	public void postorder(Node node) {
+		if(node == null) {
+			return;
+		}
+		postorder(node.left);
+		postorder(node.right);
+		System.out.printf("%s " + node.data);
 	}
 
 	//deletes the item from the tree
 	public void delete(E item) {
+		root = delHelper(root, item);
+	}
+
+	private Node delHelper(Node root, E item) {
+		int value = item.compareTo(root.data);
+		if(root == null) 
+			return root;
+		if(value < 0) 
+			root.left = delHelper(root.left, root.data);
+		else if(value > 0) 
+			root.right = delHelper(root.right, root.data);
+
+		else {
+			if(root.left == null) 
+				return root.right;
+			else if(root.right == null) 
+				return root.left;
+			// node with two children: Get the inorder successor (smallest
+			// in the right subtree)
+			root.data = min(root.right);
+
+			// Delete the inorder successor
+			root.right = delHelper(root.right, root.data);
+		}
+		return root;
 
 	}
 
 	//remove all from the tree
-	public void clearAll() {
-
+	public void clearAll(Node node) {
+		if(node != null) {
+			clearAll(node.left);
+			clearAll(node.right);
+			node = null;
+		}
 	}
 
 	//check if tree is empty
-	//-------- I DONT KNOW IF THIS WORKS YAYAYAYYAYA!! ---------//
 	public void isEmpty() {
 		if(root == null);
-		root = null;
-	}
-
+		root = null;}
 
 	public static void main(String[] args) {
 		//check each of the methods using at least 2 different tests
 		//edge cases, all situations
 		//BONUS: implement GUI version
-
-		BST tree = new BST();
-		Node root = null;
-
-		root = tree.add(root, 47);
+		BST<Integer> newBST = new BST<Integer>();
+		
 	}
 }
