@@ -23,6 +23,12 @@ public class BST<E extends Comparable<E>> {
 
 	//add
 	public void add(E item) {
+		Node newNode = new Node();
+		if(root == null) {
+			newNode.data = item;
+			root = newNode;
+			return;
+		}
 //		//code for add, maybe useful to have recursive helper method
 			addHelper(root, item);
 		}
@@ -47,6 +53,7 @@ public class BST<E extends Comparable<E>> {
 		else {
 			if(root.right == null) {
 				Node newNode = new Node();
+				root.right = newNode;
 				newNode.data = item;
 			}
 			else {
@@ -139,22 +146,30 @@ public class BST<E extends Comparable<E>> {
 		preorder(node.right);
 	}
 
-	public void inorder(Node node) {
+	public void inorder() {
+		inorderHelp(root);
+		System.out.print("");
+	}
+	private void inorderHelp(Node node) {
 		if(node == null) {
-			return;
+			System.out.println("Nothing in the tree!");
 		}
-		inorder(node.left);
-		System.out.printf("%s " + node.data);
-		inorder(node.right);
+		inorderHelp(node.left);
+		System.out.print(node.data + " ");
+		inorderHelp(node.right);
 	}
 
-	public void postorder(Node node) {
+	public void postorder() {
+		postorderHelp(root);
+		System.out.println("");
+	}
+	private void postorderHelp(Node node) {
 		if(node == null) {
 			return;
 		}
-		postorder(node.left);
-		postorder(node.right);
-		System.out.printf("%s " + node.data);
+		postorderHelp(node.left);
+		postorderHelp(node.right);
+		System.out.print(node.data + " ");
 	}
 
 	//deletes the item from the tree
@@ -206,7 +221,14 @@ public class BST<E extends Comparable<E>> {
 		//edge cases, all situations
 		//BONUS: implement GUI version
 		BST<Integer> tree = new BST<Integer>();
-		
+		tree.add(Integer.valueOf(17));
+		tree.add(Integer.valueOf(10));
+		tree.add(Integer.valueOf(20));
+		tree.add(Integer.valueOf(3));
+		tree.add(Integer.valueOf(98));
+		tree.inorder();
+		tree.search(10);
+		tree.postorder();
 		
 	}
 }
