@@ -133,23 +133,35 @@ public class BST<E extends Comparable<E>> {
 	}
 	
 	private E minHelper(Node node) {
-	        Node current = node;
-	        /* loop down to find the leftmost leaf */
-	        while (current.left != null) {
-	            current = current.left;
+	        /* loops down to find the leftmost leaf */
+	        while (node.left != null) {
+	            node = node.left;
 	        }
-	        return (current.data);
+	        return (node.data);
 	}
 
 	//maximum of subtree starting at root
-	public E max(Node root) {
-		return null;
+	public void max() {
+		System.out.println("The maximum value in this tree is: " + maxHelper(root));
+	}
+	
+	private E maxHelper(Node node) {
+		while (node.right != null) {
+			node = node.right;
+		}
+		return (node.data);
 	}
 
 	//successor of node with element item and 
 	//the head of the subtree is at root
-	public Node successor(Node root, E item) {
-		return null;
+	public void successor() {
+		if(root == null) {
+			System.out.println("No possible successor.");
+		}
+		successorHelp(root);
+	}
+	
+	public void successorHelp(Node root, E item) {
 	}
 
 	public Node predecessor(Node root, E item) {
@@ -158,9 +170,11 @@ public class BST<E extends Comparable<E>> {
 
 	//different traversals of the tree
 	public void preorder() {
-		
+		System.out.println("\nThe tree in preorder: ");
 		preorderHelp(root);
-		System.out.println("");
+		if(root == null) {
+			System.out.println("Nothing to order.");
+		}
 	}
 	
 	private void preorderHelp(Node node) {
@@ -173,26 +187,27 @@ public class BST<E extends Comparable<E>> {
 	}
 
 	public void inorder() {
-		System.out.println("In order: ");
 		if(root != null) {
+		System.out.println("In order: ");
 		inorderHelp(root);
-//		System.out.print("");
+		System.out.println("\n");
 		}
 	}
+	
 	private void inorderHelp(Node node) {
 		if(node == null) {
-//			System.out.println(root.data);
-			System.out.println("Nothing in the tree!");
+			return;
 		}
-		System.out.println(node.data);
 		inorderHelp(node.left);
 		System.out.print(node.data + " ");
 		inorderHelp(node.right);
 	}
 
 	public void postorder() {
+		System.out.println("In post order: ");
 		postorderHelp(root);
-		System.out.println("");
+		System.out.println("\n");
+		
 	}
 	private void postorderHelp(Node node) {
 		if(node == null) {
@@ -206,6 +221,7 @@ public class BST<E extends Comparable<E>> {
 	//deletes the item from the tree
 	public void delete(E item) {
 		root = delHelper(root, item);
+		System.out.println(item + " successfully deleted!");
 	}
 
 	private Node delHelper(Node root, E item) {
@@ -224,7 +240,7 @@ public class BST<E extends Comparable<E>> {
 				return root.left;
 			// node with two children: Get the inorder successor (smallest
 			// in the right subtree)
-			root.data = E min(root.right);
+			root.data = minHelper(root.right);
 
 			// Delete the inorder successor
 			root.right = delHelper(root.right, root.data);
@@ -236,7 +252,7 @@ public class BST<E extends Comparable<E>> {
 	//remove all from the tree
 	public void clearAll() {
 		clearAllHelp(root);
-		System.out.println("All elements removed.");
+		System.out.println("\nAll elements cleared!");
 	}
 	
 	private void clearAllHelp(Node node) {
@@ -250,12 +266,13 @@ public class BST<E extends Comparable<E>> {
 
 	//check if tree is empty
 	public boolean isEmpty() {
+		System.out.println("Is the tree empty?");
 		if(root != null) {
-			System.out.println("Tree is not empty.");
+			System.out.println("No, the tree is not empty.");
 		}
 		else {	
 			if(root == null) {
-				System.out.println("Tree is empty!");
+				System.out.println("Yes the tree is empty!");
 				return true;
 			}
 		}
@@ -272,16 +289,25 @@ public class BST<E extends Comparable<E>> {
 		tree.add(Integer.valueOf(20));
 		tree.add(Integer.valueOf(3));
 		tree.add(Integer.valueOf(98));
-//		tree.inorder();
+		tree.inorder();
 		
 		tree.add(Integer.valueOf(5));
 		tree.search(20);
+		tree.delete(17);
+		tree.inorder();
 		tree.size();
 		tree.height();
+		System.out.println();
 		tree.postorder();
+		
 		tree.min();
-		tree.clearAll();
+		tree.max();
 		tree.preorder();
+		System.out.println();
+		tree.clearAll();
+		
+		tree.preorder();
+		System.out.println();
 		tree.isEmpty();
 	}
 }
