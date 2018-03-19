@@ -161,12 +161,69 @@ public class BST<E extends Comparable<E>> {
 		successorHelp(root);
 	}
 	
-	public void successorHelp(Node root, E item) {
+	private Node successorHelp(Node root, E item) {
+		Node newNode = new Node();
+		
+		//Using search method to locate the node in question.
+		Node successor = searchHelper(root, item);
+		if(successor == null) {
+			return null;
+		}
+		
+		//Node has a right subtree
+		if(successor.right != null) {
+			
+			newNode = successor.right;
+			
+			//Finding successor by going through the left of subtree
+			while(newNode.left != null) {
+				
+//				return (BST<E>.Node) minHelper(newNode.right);
+				newNode = newNode.left;
+				return newNode;
+			}
+		}else{   //No right subtree
+			
+			Node ancestor = new Node();
+			ancestor = root;
+			
+			while(ancestor != successor) {
+				if(ancestor.left != null) {
+					newNode = ancestor; //This is the successor.
+					ancestor = ancestor.left;
+				}else {
+					ancestor = ancestor.right;
+				}
+			}
+			return newNode;
+		}
+		return newNode;
 	}
 
 	public Node predecessor(Node root, E item) {
-		return null;
-	}
+		int value = item.compareTo(root.data);
+			// Example 3 or Example 4
+			if (node.left != null)
+				return max(node.left);
+
+			// Example 1 or Example 2
+			Node predecessor = null;
+			// Start from root and search for predecessor down the tree
+			
+			while (root != null) {
+			
+				if (node.data == root.data) {
+					// by now we might found our predecessor
+					break;
+				} else if (node.data < root.data) {
+					root = root.left;
+				} else if (node.data > root.data) {
+					predecessor = root;
+					root = root.right;
+				}
+			}
+			return predecessor;
+		}
 
 	//different traversals of the tree
 	public void preorder() {
@@ -188,7 +245,7 @@ public class BST<E extends Comparable<E>> {
 
 	public void inorder() {
 		if(root != null) {
-		System.out.println("In order: ");
+		System.out.println("\nIn order: ");
 		inorderHelp(root);
 		System.out.println("\n");
 		}
@@ -221,7 +278,7 @@ public class BST<E extends Comparable<E>> {
 	//deletes the item from the tree
 	public void delete(E item) {
 		root = delHelper(root, item);
-		System.out.println(item + " successfully deleted!");
+		System.out.println("\n" + item + " successfully deleted!");
 	}
 
 	private Node delHelper(Node root, E item) {
