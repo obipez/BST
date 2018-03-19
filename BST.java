@@ -128,9 +128,12 @@ public class BST<E extends Comparable<E>> {
 	}
 
 	//minimum of subtree starting at root
-	public E min(Node node) {
+	public void min() {
+		System.out.println("The minimum value in this tree is: " + minHelper(root));
+	}
+	
+	private E minHelper(Node node) {
 	        Node current = node;
-	 
 	        /* loop down to find the leftmost leaf */
 	        while (current.left != null) {
 	            current = current.left;
@@ -221,7 +224,7 @@ public class BST<E extends Comparable<E>> {
 				return root.left;
 			// node with two children: Get the inorder successor (smallest
 			// in the right subtree)
-			root.data = min(root.right);
+			root.data = E min(root.right);
 
 			// Delete the inorder successor
 			root.right = delHelper(root.right, root.data);
@@ -233,22 +236,31 @@ public class BST<E extends Comparable<E>> {
 	//remove all from the tree
 	public void clearAll() {
 		clearAllHelp(root);
+		System.out.println("All elements removed.");
 	}
 	
 	private void clearAllHelp(Node node) {
 		if(node != null) {
 			clearAllHelp(node.left);
 			clearAllHelp(node.right);
-			node = null;
-			System.out.println("The tree is now empty.");
+			root = null;
+			node.data = null;
 		}
 	}
 
 	//check if tree is empty
-	public void isEmpty() {
-		if(root != null);
-		root = null;
+	public boolean isEmpty() {
+		if(root != null) {
+			System.out.println("Tree is not empty.");
 		}
+		else {	
+			if(root == null) {
+				System.out.println("Tree is empty!");
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public static void main(String[] args) {
 		//check each of the methods using at least 2 different tests
@@ -267,8 +279,9 @@ public class BST<E extends Comparable<E>> {
 		tree.size();
 		tree.height();
 		tree.postorder();
-		
+		tree.min();
+		tree.clearAll();
 		tree.preorder();
-		
+		tree.isEmpty();
 	}
 }
